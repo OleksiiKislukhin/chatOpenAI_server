@@ -4,25 +4,35 @@ import FluentPostgresDriver
 import Leaf
 import Vapor
 
-// configures your application
 public func configure(_ app: Application) async throws {
-    // uncomment to serve files from /Public folder
-    // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
+  app.middleware.use(CORSMiddleware(configuration: .init(
+    allowedOrigin: .all,
+    allowedMethods: [.GET, .POST, .PUT, .DELETE, .OPTIONS],
+    allowedHeaders: [.accept, .authorization, .contentType, .origin, .xRequestedWith]
+  )))
 
-    app.databases.use(DatabaseConfigurationFactory.postgres(configuration: .init(
-        hostname: Environment.get("DATABASE_HOST") ?? "localhost",
-        port: Environment.get("DATABASE_PORT").flatMap(Int.init(_:)) ?? SQLPostgresConfiguration.ianaPortNumber,
-        username: Environment.get("DATABASE_USERNAME") ?? "vapor_username",
-        password: Environment.get("DATABASE_PASSWORD") ?? "vapor_password",
-        database: Environment.get("DATABASE_NAME") ?? "vapor_database",
-        tls: .prefer(try .init(configuration: .clientDefault)))
-    ), as: .psql)
+  let hostname = Environment.get("DATABASE_HOST") ?? "localhost"
+  let port = Environment.get("DATABASE_PORT").flatMap(Int.init) ?? 5432
+  let username = Environment.get("DATABASE_USERNAME") ?? "postgres"
+  let password = Environment.get("DATABASE_PASSWORD") ?? "test"
+  let database = Environment.get("DATABASE_NAME") ?? "chat_db"
 
-    app.migrations.add(CreateTodo())
+  app.databases.use(DatabaseConfigurationFactory.postgres(
+      configuration: .init(
+          hostname: hostname,  
+          port: port, 
+          username: username, 
+          password: password,   
+          database: database, 
+          tls: .disable
+      )
+  ), as: .psql)
+
+    app.migrations.add(CreateChat())
+    app.migrations.add(CreateMessage())
 
     app.views.use(.leaf)
+    app.logger.logLevel = .debug
 
-
-    // register routes
     try routes(app)
 }
