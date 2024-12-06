@@ -38,15 +38,17 @@ You need to have installed on your system:
   
 4. Set up the database:
 
--Ensure PostgreSQL is running and create a database for the chat app (e.g., chat_db).
--Update the database connection settings and OpenAI key in the .env file.
+- Ensure PostgreSQL is running and create a database for the chat app (e.g., chat_db).
+- Update the database connection settings and OpenAI key in the .env file.
 
-.env file:
-DATABASE_HOST=localhost
-DATABASE_NAME=your_db_name
-DATABASE_USERNAME=your_db_user_name
-DATABASE_PASSWORD=your_db_password
-OPENAI_API_KEY=your_key
+- .env file:
+  ```bash
+  DATABASE_HOST=localhost
+  DATABASE_NAME=your_db_name
+  DATABASE_USERNAME=your_db_user_name
+  DATABASE_PASSWORD=your_db_password
+  OPENAI_API_KEY=your_key
+  ```
 
 5. Run database migrations:
 
@@ -74,14 +76,14 @@ URL: [http://localhost:8080](http://localhost:8080)
 
 
 **Chats**
-  GET /chats: Retrieves a list of all available chat.
-  POST /chats: Creates a new chat.
-  DELETE /chats/[chatId]: Delete chat.
+- GET /chats: Retrieves a list of all available chat.
+- POST /chats: Creates a new chat.
+- DELETE /chats/[chatId]: Delete chat.
 
 **Messages**
-  GET /messages?chatId=[chatId]: Retrieves all messages from a specific chat.
-  POST /messages: Create a new message in chat.
+- GET /messages?chatId=[chatId]: Retrieves all messages from a specific chat.
+- POST /messages: Create a new message in chat.
 
 **OPEN AI**
-  GET /ai_chat_test?question=[your_question]: Test OpenAI's response to a question without using a client.
-  GET /ai_chat?question=[your_question]&&chatId=[chatId]: Get OpenAI's response to a question.
+- GET /ai_chat_test?question=[your_question]: Test OpenAI's response to a question without using a client.
+- GET /ai_chat?question=[your_question]&&chatId=[chatId]: Get OpenAI's response to a question.
