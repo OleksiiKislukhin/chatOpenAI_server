@@ -111,7 +111,7 @@ struct MessageController: RouteCollection {
             throw Abort(.notAcceptable, reason: "Unacceptable question.")
           }
 
-          let query: ChatQuery = ChatQuery(messages: [message], model: .gpt3_5Turbo, stream: true)
+          let query: ChatQuery = ChatQuery(messages: [message], model: .gpt4, stream: true)
 
           for try await partialChatResult in openAI.chatsStream(query: query) {
             for choice in partialChatResult.choices {
@@ -123,7 +123,7 @@ struct MessageController: RouteCollection {
               }
             }
           }
-
+          
           let aiMessage = Message(chatId: chatId, content: completeAIResponse, senderRole: "ai-chat")
           try await aiMessage.save(on: req.db)
 
